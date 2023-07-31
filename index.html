@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer=""></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope&display=swap"
+      rel="stylesheet"
+    />
+    <title>Codedamn - Quiz Project</title>
+  </head>
+  <body>
+    <header>
+      <a id="leaderboard"
+        >View Highscores <i class="fas fa-hand-point-left fa-lg"></i
+      ></a>
+      <div class="time">Time: <span class="TotalTime"></div>
+    </header>
+    <div class="container">
+      <div class="box">
+        <div class="change">
+          <h1>Code quiz Challenge</h1>
+          <p>
+            Try to answer the following code related question within the time
+            limt. Keep in the mind incorrent answers will be penalize your
+            score/time by ten seconds
+          </p>
+          <button type="submit" class="sumbitButton">Start Quiz</button>
+        </div>
+        <div class="questions">
+          <h2 class="question-header"></h2>
+
+          <div class="options">
+              <button class="btn button-1" ></button>
+              <button class="btn button-2" ></button>
+              <button class="btn button-3" ></button>
+              <button class="btn button-4" ></button>
+              <button class="btn finalSumit" >Sumit</button>
+              <p class="options-result"></p>
+          </div>            
+        </div>
+
+
+        <div class="allDone">
+          <h1 class="allDone-header">All done!</h1>
+          <p class="allDone-score"></p>
+          <div class="allDone-info">
+            <label for="data" class="allDone-info--naming">Enter intials:</label>
+            <input class="allDode-inbox" type="text" />
+            <button class="btn allDone-info--submit">Sumit</button>
+            <p class="condition">Please fill your name</p>
+          </div>
+        </div>
+
+
+        <div class="leaderBoard">
+          <h1>Highscores</h1>
+          <ol class="scores">
+            
+          </0l>
+            <div class="button">
+              <button class="btn leaderBoard-back">Go Back</button>
+              <button class="btn leaderBoard-clear">Clear History</button>
+            </div>
+        </div>
+
+
+      </div>
+    </div>
+  </body>
+</html>
