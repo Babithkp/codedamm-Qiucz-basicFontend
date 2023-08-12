@@ -189,7 +189,7 @@ const startLogoutTimer = function () {
       leaderBoard.score = score;
 
     });
-  }, 100);
+  }, 1000);
 };
 
 const FinalScore = function (arrayLenth, timeTaken, totalScore) {
