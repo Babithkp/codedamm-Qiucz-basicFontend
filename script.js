@@ -61,13 +61,12 @@ const leaderBoardBox = document.querySelector(".leaderBoard");
 const leaderBoardBack = document.querySelector(".leaderBoard-back");
 const leaderBoardClear = document.querySelector(".leaderBoard-clear");
 
-const  leaderBoard = {
+let leaderBoard = {
   nikename: [],
   score: [],
 };
 
-
-let score = 0;
+let sec = 50;
 let queNo = 1;
 let totalScore = 0;
 
@@ -85,169 +84,153 @@ const removeQue = function () {
 };
 
 const allDone = function () {
-  boxContainer.style.display = "none";
   question.style.display = "none";
+  boxContainer.style.display = "none";
   box.style.width = "auto";
   allDoneBox.style.display = "block";
 };
 
-const hightLightOption = function () {
-  const element = document.querySelector(":focus");
-  element.style.background = "#48adaa";
-  finalSubmitBtn.style.display = "block";
+const questionChanging = function (que, queNo) {
+  qustionsDisplay(que[queNo]);
 };
 
-const questionChanging = function (que, queNo) {
-  if (queNo === que.length) {
-    hightLightOption();
-    return;
-  }
-  qustionsDisplay(que[queNo]);
+const hiddenResult = function () {
+  resultLine.style.display = "none";
 };
 
 const displayResultCorrect = function () {
   resultLine.style.display = "block";
   resultLine.innerHTML = "Correct!";
+  setTimeout(hiddenResult, 1000);
 };
 const displayResultWrong = function () {
   resultLine.style.display = "block";
-  resultLine.innerHTML = "InCorrect!";
+  resultLine.innerHTML = "Incorrect!";
+  setTimeout(hiddenResult, 1000);
 };
 
 const questionStart = function (que, queNo) {
   btn1.addEventListener("click", function () {
     if (que[queNo - 1].answer == btn1.innerHTML) {
       que[queNo - 1].result = "Correct!";
+      displayResultCorrect();
       totalScore++;
-    } else que[queNo - 1].result = "Incorrect!";
+    } else {
+      que[queNo - 1].result = "Incorrect!";
+      displayResultWrong();
+      sec = sec - 10;
+    }
     questionChanging(que, queNo);
     queNo++;
   });
   btn2.addEventListener("click", function () {
     if (que[queNo - 1].answer == btn2.innerHTML) {
       que[queNo - 1].result = "Correct!";
+      displayResultCorrect();
       totalScore++;
-    } else que[queNo - 1].result = "Incorrect!";
+    } else {
+      que[queNo - 1].result = "Incorrect!";
+      displayResultWrong();
+      sec = sec - 10;
+    }
     questionChanging(que, queNo);
     queNo++;
   });
   btn3.addEventListener("click", function () {
     if (que[queNo - 1].answer == btn3.innerHTML) {
       que[queNo - 1].result = "Correct!";
+      displayResultCorrect();
       totalScore++;
-    } else que[queNo - 1].result = "Incorrect!";
+    } else {
+      que[queNo - 1].result = "Incorrect!";
+      displayResultWrong();
+      sec = sec - 10;
+    }
     questionChanging(que, queNo);
     queNo++;
   });
   btn4.addEventListener("click", function () {
     if (que[queNo - 1].answer == btn4.innerHTML) {
       que[queNo - 1].result = "Correct!";
+      displayResultCorrect();
       totalScore++;
-    } else que[queNo - 1].result = "Incorrect!";
+    } else {
+      que[queNo - 1].result = "Incorrect!";
+      displayResultWrong();
+      sec = sec - 10;
+    }
     questionChanging(que, queNo);
     queNo++;
   });
   return queNo;
 };
 
+const startLogoutTimer = function () {
+  time = setInterval(() => {
+    if (sec < 10) {
+      overAllTime.textContent = `00:0${sec}`;
+    } else overAllTime.textContent = `00:${sec}`;
+
+    sec--;
+
+    if (sec < 0) {
+      clearInterval(time);
+      allDone();
+      overAllTime.textContent = `00:00`;
+    }
+  }, 1000);
+};
+
 StartButton.addEventListener("click", function () {
+  sec = 50;
+  queNo = 1;
+  totalScore = 0;
   startLogoutTimer();
   boxContainer.style.display = "none";
   question.style.display = "block";
   qustionsDisplay(questions[0]);
-  queNo = questionStart(questions, queNo);
+  questionStart(questions, queNo);
 });
 
-const startLogoutTimer = function () {
-  let time = 1;
-
-  //call the timer second
-  const timer = setInterval(() => {
-    const min = String(Math.trunc(time / 60)).padStart(2, 0);
-    const sec = String(time % 60).padStart(2, 0);
-    //in each call, print the remaininng timing
-    overAllTime.textContent = `${min}:${sec}`;
-
-    if (time === 3600) {
-      clearInterval(timer);
-    }
-    time++;
-
-    finalSubmitBtn.addEventListener("click", function () {
-      clearInterval(timer);
-      removeQue();
-      allDone();
-      const Totaltime = min * 60 + +sec;
-      const score = FinalScore(
-        questions.length,
-        Totaltime,
-        (totalScore / questions.length) * 50
-      );
-      FinalScoreCount.textContent = `Your final Score is ${
-        score < 0 ? 0 : score
-      }.`;
-      leaderBoard.score = score;
-
-    });
-  }, 1000);
-};
-
-const FinalScore = function (arrayLenth, timeTaken, totalScore) {
-  const maxScore = 55;
-  const maxTime = Math.trunc(arrayLenth + (arrayLenth / 60) * 100);
-  const minTime = maxTime / maxScore;
-
-  const totalTime = Math.trunc(
-    maxScore -
-      (timeTaken / (minTime * 100) - minTime) * (maxScore / (maxTime - minTime))
-  );
-
-  return (totalTime > 50 ? 50 : totalTime) + totalScore;
-};
-
 allDoneSubmit.addEventListener("click", function () {
-  let player = 0;
   if (allDoneInbox.value === "") {
     allDoneCondition.style.display = "block";
   } else {
-
     allDoneCondition.style.display = "none";
     leaderBoard.nikename = allDoneInbox.value;
+    leaderBoard.score = (totalScore / questions.length) * 100;
     DispalyLeaderBoard();
     allDoneInbox.value = "";
-    localStorage.setItem(`player${0}`, JSON.stringify(leaderBoard));
-    let fetched = localStorage.getItem(`player${0}`);
-    const refetchhed = JSON.parse(fetched);
-    destruce(refetchhed);
-    player++;
+    localStorage.setItem(`leaderboard`, JSON.stringify(leaderBoard));
+    let refetchhed = JSON.parse(localStorage.getItem(`leaderboard`));
+    setLeaderboared(refetchhed);
   }
 });
 
-const destruce = function(fetched){
-  const { nikename, score } = fetched;
-  leaderBoardScores(nikename,score);
-}
+const setLeaderboared = function (refetchhed) {
+  if (!refetchhed) return;
 
-const leaderBoardScores = function(name,score){
+  const { nikename, score } = refetchhed;
+
   let html = `
-  <li>${name}: ${score}</li>
+  <li>${nikename}-- ${score}</li>
   `;
-  console.log(name,score);
 
   leaderBoardRecord.insertAdjacentHTML("afterbegin", html);
 };
 
-const DispalyLeaderBoard = function(){
+const DispalyLeaderBoard = function () {
   allDoneBox.style.display = "none";
   leaderBoardBox.style.display = "block";
-}
+};
 
-leaderBoardBack.addEventListener("click",function(){
-    allDoneBox.style.display = "block";
-    leaderBoardBox.style.display = "none";
+leaderBoardBack.addEventListener("click", function () {
+  leaderBoardBox.style.display = "none";
+  boxContainer.style.display = "block";
+  box.style.width = "60%";
 });
 
-leaderBoardClear.addEventListener(".click",function(){
-  leaderBoardRecord.remove();
-
+leaderBoardClear.addEventListener(".click", function () {
+  const sibling = leaderBoardRecord.nextSibling;
+  sibling.remove();
 });
